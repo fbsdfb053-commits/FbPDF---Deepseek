@@ -6,7 +6,7 @@
         android:label="Leitor de PDF"
         android:icon="@drawable/icone"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
         
         <activity
             android:name=".MainActivity"
