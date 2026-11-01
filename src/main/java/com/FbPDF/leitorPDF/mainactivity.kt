@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.github.barteksc.pdfviewer.PDFView // Biblioteca de PDF
+import io.github.grizzi91.bouquet.PdfViewer // <--- NOVA BIBLIOTECA
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,19 +39,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppLeitorPDF() {
-    // Estado que guarda o arquivo PDF escolhido pelo usuário
     var pdfUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Ferramenta que abre a galeria do celular para escolher o arquivo
     val seletorDePdf = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri != null) {
-            pdfUri = uri // Salva o PDF escolhido
+            pdfUri = uri
         }
     }
 
-    // Lógica de navegação: Se tem PDF escolhido, mostra o leitor. Se não, mostra a tela inicial.
     if (pdfUri == null) {
         TelaInicial(
             onAbrirPdfClick = { seletorDePdf.launch("application/pdf") }
@@ -73,35 +70,22 @@ fun TelaInicial(onAbrirPdfClick: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Ícone ou Emoji grande
-        Text(
-            text = "📄",
-            fontSize = 72.sp
-        )
-
+        Text(text = "📄", fontSize = 72.sp)
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Título
         Text(
             text = "Leitor de PDF",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
-        // Subtítulo
         Text(
             text = "Seu leitor limpo, rápido e sem anúncios.",
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             color = Color.Gray
         )
-
         Spacer(modifier = Modifier.height(48.dp))
-
-        // Botão para abrir o PDF
         Button(
             onClick = onAbrirPdfClick,
             modifier = Modifier
@@ -111,10 +95,7 @@ fun TelaInicial(onAbrirPdfClick: () -> Unit) {
         ) {
             Text(text = "Abrir um PDF", fontSize = 18.sp)
         }
-
         Spacer(modifier = Modifier.height(64.dp))
-
-        // Informações do Desenvolvedor (Edite aqui!)
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
@@ -134,7 +115,6 @@ fun TelaInicial(onAbrirPdfClick: () -> Unit) {
 @Composable
 fun TelaLeitorPDF(uri: Uri, onFecharClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
-        // Barra superior com botão de voltar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,16 +127,10 @@ fun TelaLeitorPDF(uri: Uri, onFecharClick: () -> Unit) {
             }
         }
 
-        // Onde o PDF é renderizado de verdade
         AndroidView(
             factory = { context ->
-                PDFView(context, null).apply {
-                    from(uri)
-                        .enableSwipe(true)
-                        .swipeHorizontal(false)
-                        .enableDoubletap(true)
-                        .defaultPage(0)
-                        .load()
+                PdfViewer(context).apply {
+                    loadPdf(uri)
                 }
             },
             modifier = Modifier
