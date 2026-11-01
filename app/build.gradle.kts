@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seunome.leitorpdf" // Pode mudar "seunome" para o seu nome
+    namespace = "com.seunome.leitorpdf"
     compileSdk = 34
 
     defaultConfig {
@@ -18,12 +18,26 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
 dependencies {
-    // Biblioteca para ler PDF
-    implementation("androidx.pdf:pdf-viewer-fragment:1.0.0-alpha02")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.ui:ui:1.5.4")
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
 }
