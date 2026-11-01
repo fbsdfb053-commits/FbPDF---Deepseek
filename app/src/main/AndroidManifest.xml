@@ -4,7 +4,7 @@
     <application
         android:allowBackup="true"
         android:label="Leitor de PDF"
-android:icon="@drawable/icone"
+        android:icon="@drawable/icone"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         
